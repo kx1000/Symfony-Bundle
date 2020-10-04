@@ -38,8 +38,27 @@
             </div>
         </nav>
         <div class="container">
+            {% for message in app.flashes('notice') %}
+                <div class="notification is-primary mt-3">
+                    <button class="delete"></button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+
             {% block body %}{% endblock %}
         </div>
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                        var $notification = $delete.parentNode;
+
+                        $delete.addEventListener('click', () => {
+                            $notification.parentNode.removeChild($notification);
+                        });
+                    });
+                });
+            </script>
+        {% endblock %}
     </body>
 </html>

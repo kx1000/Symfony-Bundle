@@ -11,11 +11,10 @@ services:
         arguments: [ "@service_container"]
         tags: [console.command]
     Cron\CronBundle\Controller\CronJobController:
+        arguments: ["@cron.manager"]
         calls:
             - { method: setContainer, arguments: ['@service_container'] }
         tags: ['controller.service_arguments']
-    Cron\CronBundle\Entity\CronJobRepository:
-        autowire: true
     cron.resolver:
         class: "%cron.resolver.class%"
         arguments: ["@cron.manager", "@cron.command_builder", "%kernel.project_dir%"]

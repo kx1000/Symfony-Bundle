@@ -40,26 +40,26 @@
                             <span>Edit</span>
                         </button>
                         {% if cronJob.enabled %}
-                            <button class="button is-warning is-small">
+                            <a href="{{ path('cron_disable', {id: cronJob.id}) }}" class="button is-warning is-small">
                                 <span class="icon">
                                     <i class="fa fa-toggle-on"></i>
                                 </span>
                                 <span>Disable</span>
-                            </button>
+                            </a>
                         {% else %}
-                            <button class="button is-success is-small">
+                            <a href="{{ path('cron_enable', {id: cronJob.id}) }}" class="button is-success is-small">
                                 <span class="icon">
                                     <i class="fa fa-toggle-off"></i>
                                 </span>
                                 <span>Enable</span>
-                            </button>
+                            </a>
                         {% endif %}
-                        <button class="button is-danger is-small">
+                        <a class="button is-danger is-small">
                             <span class="icon">
                                 <i class="fa fa-minus-circle"></i>
                             </span>
                             <span>Delete</span>
-                        </button>
+                        </a>
                     </div>
                 </td>
             </tr>

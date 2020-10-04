@@ -17,49 +17,44 @@
         </tr>
         </thead>
         <tbody>
-        {% for cronJob in cron_jobs %}
+        {% for job in cron_jobs %}
             <tr>
-                <th>{{ cronJob.id }}</th>
-                <td>{{ cronJob.name }}</td>
-                <td>{{ cronJob.schedule }}</td>
-                <td>{{ cronJob.command }}</td>
+                <th>{{ job.id }}</th>
+                <td>{{ job.name }}</td>
+                <td>{{ job.schedule }}</td>
+                <td>{{ job.command }}</td>
                 <td>
-                    {% if cronJob.enabled %}
+                    {% if job.enabled %}
                         <i class="fa fa-check has-text-success"></i>
                     {% else %}
                         <i class="fa fa-times has-text-danger"></i>
                     {% endif %}
                 </td>
-                <td>{{ cronJob.description }}</td>
+                <td>{{ job.description }}</td>
                 <td>
                     <div class="buttons has-addons">
-                        <a href="{{ path('cron_edit', {id: cronJob.id}) }}" class="button is-info is-small">
+                        <a href="{{ path('cron_edit', {id: job.id}) }}" class="button is-info is-small">
                             <span class="icon">
                                 <i class="fa fa-pencil"></i>
                             </span>
                             <span>Edit</span>
                         </a>
-                        {% if cronJob.enabled %}
-                            <a href="{{ path('cron_disable', {id: cronJob.id}) }}" class="button is-warning is-small">
+                        {% if job.enabled %}
+                            <a href="{{ path('cron_disable', {id: job.id}) }}" class="button is-warning is-small">
                                 <span class="icon">
                                     <i class="fa fa-toggle-on"></i>
                                 </span>
                                 <span>Disable</span>
                             </a>
                         {% else %}
-                            <a href="{{ path('cron_enable', {id: cronJob.id}) }}" class="button is-success is-small">
+                            <a href="{{ path('cron_enable', {id: job.id}) }}" class="button is-success is-small">
                                 <span class="icon">
                                     <i class="fa fa-toggle-off"></i>
                                 </span>
                                 <span>Enable</span>
                             </a>
                         {% endif %}
-                        <a class="button is-danger is-small">
-                            <span class="icon">
-                                <i class="fa fa-minus-circle"></i>
-                            </span>
-                            <span>Delete</span>
-                        </a>
+                        {{ include('@CronCron/CronJob/_delete.html.twig') }}
                     </div>
                 </td>
             </tr>

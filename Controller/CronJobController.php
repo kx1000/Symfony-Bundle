@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/cron")
+ */
 class CronJobController extends AbstractController
 {
     const FLASH_NOTICE = 'notice';
@@ -23,7 +26,7 @@ class CronJobController extends AbstractController
     }
 
     /**
-     * @Route("/cron", name="cron_index", methods={"GET"})
+     * @Route("/", name="cron_index", methods={"GET"})
      */
     public function index(): Response
     {
@@ -34,7 +37,7 @@ class CronJobController extends AbstractController
     }
 
     /**
-     * @Route("/cron/{id}/ennable", name="cron_enable", methods={"GET"})
+     * @Route("/{id}/enable", name="cron_enable", methods={"GET"})
      */
     public function enable(CronJob $cronJob): RedirectResponse
     {
@@ -50,7 +53,7 @@ class CronJobController extends AbstractController
     }
 
     /**
-     * @Route("/cron/{id}/disable", name="cron_disable", methods={"GET"})
+     * @Route("/{id}/disable", name="cron_disable", methods={"GET"})
      */
     public function disable(CronJob $cronJob): RedirectResponse
     {
@@ -66,7 +69,7 @@ class CronJobController extends AbstractController
     }
 
     /**
-     * @Route("/cron/{id}/edit", name="cron_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="cron_edit", methods={"GET", "POST"})
      */
     public function edit(CronJob $cronJob, Request $request): Response
     {
@@ -90,7 +93,7 @@ class CronJobController extends AbstractController
     }
 
     /**
-     * @Route("/cron/new", name="cron_new", methods={"GET", "POST"})
+     * @Route("/new", name="cron_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -112,5 +115,22 @@ class CronJobController extends AbstractController
         return $this->render('@CronCron/CronJob/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="cron_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, CronJob $cronJob): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$cronJob->getId(), $request->request->get('_token'))) {
+            $this->cronManager->deleteJob($cronJob);
+
+            $this->addFlash(
+                self::FLASH_NOTICE,
+                'Cron job "' . $cronJob->getName() . '" has been deleted.'
+            );
+        }
+
+        return $this->redirectToRoute('cron_index');
     }
 }

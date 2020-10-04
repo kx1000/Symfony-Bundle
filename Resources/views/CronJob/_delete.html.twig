@@ -1,0 +1,10 @@
+<form method="post" action="{{ path('cron_delete', {'id': job.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ job.id) }}">
+    <button class="button is-danger is-small">
+        <span class="icon">
+            <i class="fa fa-minus-circle"></i>
+        </span>
+        <span>Delete</span>
+    </button>
+</form>

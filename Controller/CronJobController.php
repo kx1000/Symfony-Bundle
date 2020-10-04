@@ -88,4 +88,29 @@ class CronJobController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/cron/new", name="cron_new", methods={"GET", "POST"})
+     */
+    public function new(Request $request): Response
+    {
+        $cronJob = new CronJob();
+        $form = $this->createForm(CronJobType::class, $cronJob);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->cronManager->saveJob($cronJob);
+
+            $this->addFlash(
+                self::FLASH_NOTICE,
+                'Cron job "' . $cronJob->getName() . '" has been created.'
+            );
+
+            return $this->redirectToRoute('cron_index');
+        }
+
+        return $this->render('@CronCron/CronJob/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }

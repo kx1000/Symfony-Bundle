@@ -4,8 +4,10 @@ namespace Cron\CronBundle\Controller;
 
 use Cron\CronBundle\Cron\Manager;
 use Cron\CronBundle\Entity\CronJob;
+use Cron\CronBundle\Form\CronJobType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -61,5 +63,29 @@ class CronJobController extends AbstractController
         );
 
         return $this->redirectToRoute('cron_index');
+    }
+
+    /**
+     * @Route("/cron/{id}/edit", name="cron_edit", methods={"GET", "POST"})
+     */
+    public function edit(CronJob $cronJob, Request $request): Response
+    {
+        $form = $this->createForm(CronJobType::class, $cronJob);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->cronManager->saveJob($cronJob);
+
+            $this->addFlash(
+                self::FLASH_NOTICE,
+                'Cron job "' . $cronJob->getName() . '" has been saved.'
+            );
+
+            return $this->redirectToRoute('cron_index');
+        }
+
+        return $this->render('@CronCron/CronJob/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

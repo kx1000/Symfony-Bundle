@@ -33,12 +33,12 @@
                 <td>{{ cronJob.description }}</td>
                 <td>
                     <div class="buttons has-addons">
-                        <button class="button is-info is-small">
+                        <a href="{{ path('cron_edit', {id: cronJob.id}) }}" class="button is-info is-small">
                             <span class="icon">
                                 <i class="fa fa-pencil"></i>
                             </span>
                             <span>Edit</span>
-                        </button>
+                        </a>
                         {% if cronJob.enabled %}
                             <a href="{{ path('cron_disable', {id: cronJob.id}) }}" class="button is-warning is-small">
                                 <span class="icon">

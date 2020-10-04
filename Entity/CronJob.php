@@ -59,6 +59,7 @@ class CronJob
 
     /**
      * @ORM\OneToMany(targetEntity="CronReport", mappedBy="job", cascade={"remove"})
+     * @ORM\OrderBy({"id"="DESC"})
      * @var ArrayCollection
      */
     protected $reports;

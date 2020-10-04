@@ -1,0 +1,44 @@
+{% extends '@CronCron/CronJob/base.html.twig' %}
+
+{% set title = 'Report "' ~ job.name ~ '"' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+<a href="{{ path('cron_index') }}" class="button is-link is-small my-3">
+    <span class="icon">
+        <i class="fa fa-arrow-left"></i>
+    </span>
+    <span>Back</span>
+</a>
+<div class="card">
+    <div class="card-content">
+        <p class="title">
+            {{ title }}
+        </p>
+        <div class="table-container">
+            <table class="table is-fullwidth mt-5">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Run at</th>
+                    <th>Run time</th>
+                    <th>Exit code</th>
+                    <th>Output</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for report in job.reports %}
+                    <tr>
+                        <th>{{ report.id }}</th>
+                        <td>{{ report.runAt|date("Y-m-d H:i:s") }}</td>
+                        <td>{{ report.runTime }}</td>
+                        <td>{{ report.exitCode }}</td>
+                        <td>{{ report.output }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

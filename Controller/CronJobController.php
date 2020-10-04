@@ -120,7 +120,7 @@ class CronJobController extends AbstractController
     /**
      * @Route("/{id}", name="cron_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, CronJob $cronJob): Response
+    public function delete(Request $request, CronJob $cronJob): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$cronJob->getId(), $request->request->get('_token'))) {
             $this->cronManager->deleteJob($cronJob);
@@ -132,5 +132,15 @@ class CronJobController extends AbstractController
         }
 
         return $this->redirectToRoute('cron_index');
+    }
+
+    /**
+     * @Route("/{id}/report", name="cron_report", methods={"GET"})
+     */
+    public function report(CronJob $cronJob): Response
+    {
+        return $this->render('@CronCron/CronJob/report.html.twig', [
+            'job' => $cronJob,
+        ]);
     }
 }

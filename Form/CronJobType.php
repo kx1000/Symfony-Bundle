@@ -16,7 +16,7 @@ class CronJobType extends AbstractType
             ->add('name')
             ->add('schedule')
             ->add('command')
-            ->add('description')
+            ->add('description', null, ['required' => false])
         ;
     }
 

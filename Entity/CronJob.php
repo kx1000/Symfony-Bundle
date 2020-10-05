@@ -2,14 +2,18 @@
 
 namespace Cron\CronBundle\Entity;
 
+use Cron\CronBundle\Validator\Schedule;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * CronJob
  *
  * @ORM\Table(name="cron_job", uniqueConstraints={@ORM\UniqueConstraint(name="un_name", columns={"name"})})
  * @ORM\Entity(repositoryClass="Cron\CronBundle\Entity\CronJobRepository")
+ * @UniqueEntity("name")
  */
 class CronJob
 {
@@ -25,7 +29,9 @@ class CronJob
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=191)
+     * @ORM\Column(name="name", type="string", length=191, unique=true)
+     * @Assert\NotNull
+     * @Assert\Length(max=191)
      */
     private $name;
 
@@ -33,6 +39,8 @@ class CronJob
      * @var string
      *
      * @ORM\Column(name="command", type="string", length=1024)
+     * @Assert\NotNull
+     * @Assert\Length(max=1024)
      */
     private $command;
 
@@ -40,13 +48,17 @@ class CronJob
      * @var string
      *
      * @ORM\Column(name="schedule", type="string", length=191)
+     * @Assert\NotNull
+     * @Assert\Length(max=191)
+     * @Schedule
      */
     private $schedule;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=191)
+     * @ORM\Column(name="description", type="string", length=191, nullable=true)
+     * @Assert\Length(max=191)
      */
     private $description;
 
@@ -54,6 +66,7 @@ class CronJob
      * @var boolean
      *
      * @ORM\Column(name="enabled", type="boolean")
+     * @Assert\Type("bool")
      */
     private $enabled;
 

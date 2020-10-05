@@ -2,22 +2,22 @@ parameters:
     cron.resolver.class:        Cron\CronBundle\Cron\Resolver
     cron.manager.class:         Cron\CronBundle\Cron\Manager
     cron.command_builder.class: Cron\CronBundle\Cron\CommandBuilder
+    cron.form.class:            Cron\CronBundle\Form\CronJobType
     cron.executor.class:        Cron\Executor\Executor
     cron.validator.class:       Cron\Validator\CrontabValidator
 
 services:
-    Cron\CronBundle\Form\CronJobType:
-        class: Cron\CronBundle\Form\CronJobType
-        public: true
     Cron\CronBundle\Command\:
         resource: '../../Command'
         arguments: [ "@service_container"]
         tags: [console.command]
     Cron\CronBundle\Controller\CronJobController:
         arguments: ["@cron.manager"]
-        calls:
-            - { method: setContainer, arguments: ['@service_container'] }
+        calls: [ { method: setContainer, arguments: [ '@service_container' ] } ]
         tags: ['controller.service_arguments']
+    Cron\CronBundle\Validator\CommandValidator:
+        arguments: ['@kernel']
+        tags: ['validator.constraint_validator']
     cron.resolver:
         class: "%cron.resolver.class%"
         arguments: ["@cron.manager", "@cron.command_builder", "%kernel.project_dir%"]
@@ -34,4 +34,7 @@ services:
         arguments: ["%kernel.environment%"]
     cron.validator:
         class: "%cron.validator.class%"
+        public: true
+    cron.form:
+        class: "%cron.form.class%"
         public: true

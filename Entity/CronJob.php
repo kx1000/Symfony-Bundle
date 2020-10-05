@@ -2,6 +2,7 @@
 
 namespace Cron\CronBundle\Entity;
 
+use Cron\CronBundle\Validator\Command;
 use Cron\CronBundle\Validator\Schedule;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,6 +42,7 @@ class CronJob
      * @ORM\Column(name="command", type="string", length=1024)
      * @Assert\NotNull
      * @Assert\Length(max=1024)
+     * @Command
      */
     private $command;
 

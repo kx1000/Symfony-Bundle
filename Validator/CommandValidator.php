@@ -2,20 +2,17 @@
 
 namespace Cron\CronBundle\Validator;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class CommandValidator extends ConstraintValidator
 {
-    private $application;
+    private $commands;
 
-    public function __construct(KernelInterface $kernel)
+    public function __construct(iterable $commands)
     {
-        $this->application = new Application($kernel);
+        $this->commands = $commands;
     }
 
     public function validate($value, Constraint $constraint)
@@ -29,11 +26,22 @@ class CommandValidator extends ConstraintValidator
         }
 
         $parts = explode(' ', $value);
-        try {
-            $this->application->get((string) $parts[0]);
-        } catch (CommandNotFoundException $e) {
-            $this->context->buildViolation($e->getMessage())
+        $commandName = (string) $parts[0];
+        if (!$this->isCommandRegistered($commandName)) {
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ name }}', $commandName)
                 ->addViolation();
         }
+    }
+
+    private function isCommandRegistered(string $name): bool
+    {
+        foreach ($this->commands as $command) {
+            if ($name === $command->getName()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

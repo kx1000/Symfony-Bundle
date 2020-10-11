@@ -57,6 +57,19 @@ bin/console cron:start # will run in background mode, use --blocking to run in f
 bin/console cron:stop # will stop the background cron daemon
 ```
 
+User interface
+------------
+
+Enabling routes for user interface can be done through adding the following code:
+```yaml
+# config/routes/annotations.yaml
+cron:
+    resource: "@CronCronBundle/Controller/CronJobController.php"
+    type: annotation
+    prefix: admin
+```
+User interface will be available on /admin/cron.
+
 Available commands
 ------------------
 
